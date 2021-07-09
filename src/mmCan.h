@@ -10,8 +10,8 @@ class can
 public:
     can(const std::string& interface_name);
 
-    template< class F, class Arg>
-    void register_receive_callback(F&& f, Arg&& arg);
+    template<class Arg, class F>
+    void set_receive_callback(Arg&& arg, F&& f);
 
     void error_counters(uint8_t& rx, uint8_t& tx);
 
@@ -19,8 +19,8 @@ private:
     std::function<void(uint32_t, uint8_t, uint8_t, const uint8_t*)> m_receive_callback;
 };
 
-template< class F, class Arg>
-void can::register_receive_callback(F&& f, Arg&& arg)
+template<class Arg, class F>
+void can::set_receive_callback(Arg&& arg, F&& f)
 {
     m_receive_callback = std::bind(f, arg, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);
 
